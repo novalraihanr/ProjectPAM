@@ -2,4 +2,9 @@
     <string name="app_name">ProjectPAM</string>
     <string name="title_activity_login_screen">LoginScreen</string>
     <string name="title_activity_sign_up_screen">SignUpScreen</string>
+    <string name="title_activity_homepage_screen">HomepageScreen</string>
+    <string name="title_activity_detail_screen">DetailScreen</string>
+    <string name="title_activity_cart_screen">CartScreen</string>
+    <string name="title_activity_profileupdate_screen">ProfileUpdateScreen</string>
+    <string name="title_activity_main">MainActivity</string>
 </resources>
