@@ -232,7 +232,9 @@ fun InnerNavigation(
         }
 
         composable<Screen.OrderHistoryScreen> {
-            OrderScreen()
+            OrderScreen(
+                makananMinumanViewModel = MakananMinumanViewModel()
+            )
         }
 
         composable<Screen.ProfileScreen> {
@@ -251,7 +253,8 @@ fun InnerNavigation(
                 screen = args,
                 GoBack = {
                     navController.popBackStack()
-                }
+                },
+                makananMinumanViewModel = MakananMinumanViewModel()
             )
         }
 
@@ -259,7 +262,8 @@ fun InnerNavigation(
             CartScreen(
                 GoBack = {
                     navController.popBackStack()
-                }
+                },
+                makananMinumanViewModel = MakananMinumanViewModel()
             )
         }
 
@@ -459,6 +463,7 @@ fun CardRecycleView(
                     description = makananMinumanViewModel.makananminuman[index].description,
                     price = makananMinumanViewModel.makananminuman[index].price,
                     quantity = makananMinumanViewModel.makananminuman[index].quantity,
+                    type = makananMinumanViewModel.makananminuman[index].type,
                     navController = navController
                 )
             }

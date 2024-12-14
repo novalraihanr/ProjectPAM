@@ -48,6 +48,7 @@ import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import com.example.projectpam.R
+import kotlin.reflect.typeOf
 
 
 //TODO: Set it as Clickable
@@ -59,6 +60,7 @@ fun ItemCards(
     description: String,
     quantity: Int,
     image: String,
+    type: String,
     navController: NavController
 ) {
    Card(
@@ -72,7 +74,8 @@ fun ItemCards(
                price = price,
                description = description,
                quantity = quantity,
-               image = image
+               image = image,
+               type = type
            ))
                  },
        modifier = Modifier
@@ -163,7 +166,11 @@ fun ItemCardsList(
 
 //TODO: Add data from database
 @Composable
-fun ItemCardCart() {
+fun ItemCardCart(
+    title: String,
+    price: String,
+    image: String
+) {
     Card(
         modifier = Modifier
             .padding(horizontal = 10.dp, vertical = 10.dp)
@@ -187,7 +194,7 @@ fun ItemCardCart() {
                 modifier = Modifier,
             ) {
                 Text(
-                    text = "Title",
+                    text = title,
                     fontSize = 24.sp,
                     color = Color.Black,
                     fontWeight = FontWeight.Bold,
@@ -198,7 +205,7 @@ fun ItemCardCart() {
                 Spacer(modifier = Modifier.height(5.dp))
 
                 Text(
-                    text = "Rp0.000",
+                    text = "Rp$price",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.Gray,
@@ -211,8 +218,17 @@ fun ItemCardCart() {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
-                Image(
-                    painter = painterResource(id = R.drawable.imageplaceholder),
+//                Image(
+//                    painter = painterResource(id = R.drawable.imageplaceholder),
+//                    contentDescription = "Image",
+//                    modifier = Modifier
+//                        .width(150.dp)
+//                        .height(100.dp)
+//                        .padding(12.dp)
+//                )
+
+                AsyncImage(
+                    model = image,
                     contentDescription = "Image",
                     modifier = Modifier
                         .width(150.dp)
@@ -261,7 +277,10 @@ fun ItemCardCart() {
 }
 
 @Composable
-fun ItemCardOrder() {
+fun ItemCardOrder(names: String, total: Int, image: String) {
+
+    val split : List<String> = names.split(",")
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -276,12 +295,12 @@ fun ItemCardOrder() {
                 .fillMaxWidth()
                 .padding(horizontal = 12.dp, vertical = 10.dp)
         ) {
-            Text(
-                text = "31 Okt 2024, 18:25",
-                fontSize = 14.sp,
-                color = Color.Black,
-                fontWeight = FontWeight.Bold,
-            )
+//            Text(
+//                text = "31 Okt 2024, 18:25",
+//                fontSize = 14.sp,
+//                color = Color.Black,
+//                fontWeight = FontWeight.Bold,
+//            )
 
             Spacer(modifier = Modifier.height(10.dp))
 
@@ -292,13 +311,22 @@ fun ItemCardOrder() {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceAround
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.imageplaceholder),
+
+                AsyncImage(
+                    model = image,
                     contentDescription = "Placeholder",
                     modifier = Modifier
                         .width(120.dp)
                         .height(100.dp)
                 )
+
+//                Image(
+//                    painter = painterResource(id = R.drawable.imageplaceholder),
+//                    contentDescription = "Placeholder",
+//                    modifier = Modifier
+//                        .width(120.dp)
+//                        .height(100.dp)
+//                )
 
                 Spacer(modifier = Modifier.width(24.dp))
 
@@ -309,7 +337,7 @@ fun ItemCardOrder() {
                         modifier = Modifier,
                         verticalArrangement = Arrangement.SpaceAround,
                     ) {
-                        ListOrder()
+                        ListOrder(split)
                     }
 
                     Spacer(modifier = Modifier.height(10.dp))
@@ -322,7 +350,7 @@ fun ItemCardOrder() {
                     )
 
                     Text(
-                        text = "Rp47.000",
+                        text = "Rp$total",
                         fontSize = 24.sp,
                         color = Color.Black,
                         fontWeight = FontWeight.Bold
@@ -335,20 +363,13 @@ fun ItemCardOrder() {
 
 //TODO: Implement Data from Database
 @Composable
-fun ListOrder() {
+fun ListOrder(names: List<String>) {
     LazyColumn(
         modifier = Modifier,
     ) {
-        item {
+        items(names.size) { index ->
             Text(
-                text = "1 Catsudon",
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.Gray
-            )
-
-            Text(
-                text = "1 Boba Sakura",
+                text = names[index],
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Gray

@@ -25,6 +25,7 @@ sealed interface Screen {
         val title: String,
         val price: Int,
         val description: String,
+        val type: String,
         val quantity: Int,
         val image: String,
     ): Screen

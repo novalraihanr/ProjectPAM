@@ -36,6 +36,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil3.compose.AsyncImage
 import com.example.projectpam.R
 import com.example.projectpam.viewModel.AuthState
 import com.example.projectpam.viewModel.AuthViewModel
@@ -54,6 +55,7 @@ fun ProfileScreen(
     val name = Firebase.auth.currentUser?.displayName
 
     val email = Firebase.auth.currentUser?.email
+    val image = Firebase.auth.currentUser?.photoUrl
 
     LaunchedEffect(authState.value) {
         when(authState.value) {
@@ -82,12 +84,21 @@ fun ProfileScreen(
 
             Spacer(modifier = Modifier.height(25.dp))
 
-            Image(
-                painter = painterResource(id = R.drawable.image_1_) ,
-                contentDescription = "Profile",
-                modifier = Modifier
-                    .size(120.dp)
-            )
+            if(image != null) {
+                AsyncImage(
+                    model = image ,
+                    contentDescription = "Profile",
+                    modifier = Modifier
+                        .size(120.dp)
+                )
+            }else {
+                Image(
+                    painter = painterResource(id = R.drawable.image_1_) ,
+                    contentDescription = "Profile",
+                    modifier = Modifier
+                        .size(120.dp)
+                )
+            }
 
             Spacer(modifier = Modifier.height(15.dp))
 

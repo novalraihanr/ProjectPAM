@@ -45,6 +45,10 @@ import com.example.projectpam.R
 import com.example.projectpam.components.ItemCardCart
 import com.example.projectpam.components.Screen
 import com.example.projectpam.ui.theme.ProjectPAMTheme
+import com.example.projectpam.viewModel.MakananMinumanViewModel
+import com.google.firebase.auth.auth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 //class CartsScreen : ComponentActivity() {
 //    override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,12 +68,17 @@ import com.example.projectpam.ui.theme.ProjectPAMTheme
 
 @Composable
 fun CartScreen(
-    GoBack: () -> Unit
+    GoBack: () -> Unit,
+    makananMinumanViewModel: MakananMinumanViewModel
 ) {
+
+    val total: Int = makananMinumanViewModel.orders.sumOf { it.price };
+    val names: String = makananMinumanViewModel.orders.joinToString { it.name }
+
     Scaffold(
         bottomBar = {
             Button(
-                onClick = {  },
+                onClick = { makananMinumanViewModel.addToHistory(names, total, makananMinumanViewModel.orders[0].image) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 24.dp, start = 24.dp, end = 24.dp, bottom = 24.dp),
@@ -123,7 +132,7 @@ fun CartScreen(
                 )
             }
 
-            VerticalList()
+            VerticalList(makananMinumanViewModel)
 
             Card(
                 modifier = Modifier
@@ -153,7 +162,7 @@ fun CartScreen(
                     )
 
                     Text(
-                        text = "Rp47.000",
+                        text = "Rp$total",
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier
@@ -167,7 +176,9 @@ fun CartScreen(
 
 //TODO: Add data from database
 @Composable
-fun VerticalList() {
+fun VerticalList(
+    makananMinumanViewModel: MakananMinumanViewModel,
+    ) {
     LazyColumn(
         modifier = Modifier
             .background(
@@ -175,8 +186,13 @@ fun VerticalList() {
             ),
         contentPadding = PaddingValues(24.dp)
     ) {
-        item {
-            ItemCardCart()
+        makananMinumanViewModel.getOrders(Firebase.auth.currentUser?.displayName.toString())
+
+        items(makananMinumanViewModel.orders.size) { index ->
+            ItemCardCart(
+                makananMinumanViewModel.orders[index].name,
+                makananMinumanViewModel.orders[index].price.toString(),
+                makananMinumanViewModel.orders[index].image)
             Spacer(modifier = Modifier.height(8.dp))
         }
     }

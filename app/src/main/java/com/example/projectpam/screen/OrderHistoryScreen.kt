@@ -19,10 +19,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.projectpam.components.ItemCardOrder
+import com.example.projectpam.viewModel.MakananMinumanViewModel
 
-@Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun OrderScreen() {
+fun OrderScreen(
+    makananMinumanViewModel: MakananMinumanViewModel
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -41,23 +43,25 @@ fun OrderScreen() {
 
         HorizontalDivider()
 
-        ListOrderCard()
+        ListOrderCard(makananMinumanViewModel)
     }
 }
 
 //TODO: Implement this with data from database
 @Composable
-fun ListOrderCard() {
+fun ListOrderCard(
+    makananMinumanViewModel: MakananMinumanViewModel
+) {
     LazyColumn(
         modifier = Modifier,
         contentPadding = PaddingValues(top = 24.dp)
     ) {
-        item {
-            ItemCardOrder()
-        }
-
-        item {
-            ItemCardOrder()
+        items(makananMinumanViewModel.history.size) { index ->
+            ItemCardOrder(
+                names = makananMinumanViewModel.history[index].names,
+                total = makananMinumanViewModel.history[index].total,
+                image = makananMinumanViewModel.history[index].image
+            )
         }
     }
 }

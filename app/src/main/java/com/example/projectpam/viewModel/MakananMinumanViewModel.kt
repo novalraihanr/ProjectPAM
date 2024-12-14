@@ -6,6 +6,8 @@ import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -18,9 +20,12 @@ class MakananMinumanViewModel : ViewModel() {
 
     val makananminuman = mutableStateListOf<MakananMinuman>()
     val orders = mutableStateListOf<MakananMinuman>()
+    val history = mutableStateListOf<historyOrder>()
 
     init {
         getMakananMinuman()
+        getOrders(Firebase.auth.currentUser?.displayName.toString())
+        getHistory(Firebase.auth.currentUser?.displayName.toString())
     }
 
     fun getMakananMinuman() {
@@ -36,7 +41,7 @@ class MakananMinumanViewModel : ViewModel() {
     }
 
     fun getOrders(nama : String) {
-        database.getReference().child("users").child(nama).child("order").
+        database.getReference().child("users").child(nama).child("orders").
                 addValueEventListener(
                     object : ValueEventListener {
                         override fun onDataChange(snapshot: DataSnapshot) {
@@ -53,11 +58,34 @@ class MakananMinumanViewModel : ViewModel() {
                 )
     }
 
-    fun insertMakananMinuman(name: String, price: Int, type: String, description: String, image: String) {
-        val makminID = makananminuman.last().id
+    fun getHistory(nama : String) {
+        database.getReference().child("users").child(nama).child("history").
+        addValueEventListener(
+            object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    history.clear()
+                    snapshot.getValue<List<historyOrder>>()?.let {
+                        history.addAll(it)
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Log.e("MakananMinumanViewModel", error.message)
+                }
+            }
+        )
+    }
+
+    fun insertOrder(name: String, price: Int, type: String, description: String, image: String) {;
+
+        val ordersID: Int = if(orders.size == 0) {
+            0
+        }else {
+            orders.last().id
+        }
 
         val newMakmin = MakananMinuman(
-            id = makminID + 1,
+            id = ordersID + 1,
             name = name,
             price = price,
             type = type,
@@ -65,10 +93,30 @@ class MakananMinumanViewModel : ViewModel() {
             image = image
         )
 
-        database.getReference("makananMinuman").child(makminID.toString()).setValue(newMakmin.toJson())
+        database.getReference("users").child(Firebase.auth.currentUser?.displayName.toString()).child("orders").child(ordersID.toString()).setValue(newMakmin.toJson())
     }
 
-    fun updateMakananMinuman(value: String){
+    fun addToHistory(name: String, price: Int, image: String){
+
+        val ordersID: Int = if(history.size == 0) {
+            0
+        }else {
+            history.last().id
+        }
+
+        val newMakmin = historyOrder(
+            id = ordersID + 1,
+            names = name,
+            total = price,
+            image = image
+        )
+
+        database.getReference("users").child(Firebase.auth.currentUser?.displayName.toString()).child("history").child(ordersID.toString()).setValue(newMakmin.toJson())
+        database.getReference("users").child(Firebase.auth.currentUser?.displayName.toString()).child("orders").removeValue()
+
+    }
+
+    fun increaseQuantity(id: Int){
 
     }
 
@@ -93,6 +141,20 @@ data class MakananMinuman(
         "type" to type,
         "description" to description,
         "quantity" to quantity,
+        "image" to image
+    )
+}
+
+data class historyOrder(
+    val id: Int = 0,
+    val names: String = "",
+    val total: Int = 0,
+    val image: String = ""
+) {
+    fun toJson(): Map<String, Any?> = mapOf(
+        "id" to id,
+        "names" to names,
+        "total" to total,
         "image" to image
     )
 }

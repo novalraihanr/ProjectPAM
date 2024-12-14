@@ -102,7 +102,6 @@ fun EditProfileScreen(
                     imageUri.let { uri ->
                         authViewModel.updateProfile(nama, uri)
                     }
-
                 },
                 modifier = Modifier
                     .fillMaxWidth()

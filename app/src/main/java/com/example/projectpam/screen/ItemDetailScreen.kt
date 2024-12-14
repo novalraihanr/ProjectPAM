@@ -47,6 +47,8 @@ import com.example.projectpam.R
 import com.example.projectpam.RootNav
 import com.example.projectpam.components.Screen
 import com.example.projectpam.ui.theme.ProjectPAMTheme
+import com.example.projectpam.viewModel.AuthViewModel
+import com.example.projectpam.viewModel.MakananMinumanViewModel
 
 //class DetailScreen : ComponentActivity() {
 //    override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,12 +78,19 @@ import com.example.projectpam.ui.theme.ProjectPAMTheme
 @Composable
 fun ItemDetailScreen(
     GoBack: () -> Unit,
-    screen: Screen.ItemDetailScreen
-) {
+    screen: Screen.ItemDetailScreen,
+    makananMinumanViewModel: MakananMinumanViewModel,
+    ) {
     Scaffold(
         bottomBar = {
             Button(
-                onClick = { /*TODO*/ },
+                onClick = { makananMinumanViewModel.insertOrder(
+                    name = screen.title,
+                    price = screen.price,
+                    type = screen.type,
+                    description = screen.description,
+                    image = screen.image
+                ) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 24.dp, start = 24.dp, end = 24.dp, bottom = 24.dp),

@@ -6,6 +6,9 @@ import androidx.lifecycle.ViewModel
 import coil3.Uri
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.database.database
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import java.net.URI
 
 class AuthViewModel : ViewModel() {
@@ -65,6 +68,9 @@ class AuthViewModel : ViewModel() {
                     _authState.value = AuthState.Error(task.exception?.message.toString())
                 }
             }
+
+        Firebase.database("https://pamproject-88c82-default-rtdb.asia-southeast1.firebasedatabase.app")
+            .getReference("users").child(nama).setValue(nama)
 
     }
 
