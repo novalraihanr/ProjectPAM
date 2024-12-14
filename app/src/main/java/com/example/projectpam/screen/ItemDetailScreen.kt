@@ -34,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -47,6 +48,7 @@ import com.example.projectpam.R
 import com.example.projectpam.RootNav
 import com.example.projectpam.components.Screen
 import com.example.projectpam.ui.theme.ProjectPAMTheme
+import com.example.projectpam.viewModel.AndroidDownloader
 import com.example.projectpam.viewModel.AuthViewModel
 import com.example.projectpam.viewModel.MakananMinumanViewModel
 
@@ -81,6 +83,10 @@ fun ItemDetailScreen(
     screen: Screen.ItemDetailScreen,
     makananMinumanViewModel: MakananMinumanViewModel,
     ) {
+
+    val context = LocalContext.current
+
+    val downloader = AndroidDownloader(context)
     Scaffold(
         bottomBar = {
             Button(
@@ -210,6 +216,9 @@ fun ItemDetailScreen(
                             bottom.linkTo(topImg.top)
                             start.linkTo(parent.start)
                             end.linkTo(parent.end)
+                        }
+                        .clickable {
+                            downloader.downloadFile(screen.image)
                         }
                 )
 

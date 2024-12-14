@@ -25,21 +25,26 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".screen.DetailScreen"
-            android:exported="false"
-            android:label="@string/title_activity_detail_screen"
-            android:theme="@style/Theme.ProjectPAM" />
-        <activity
-            android:name=".screen.CartsScreen"
-            android:exported="false"
-            android:label="@string/title_activity_cart_screen"
-            android:theme="@style/Theme.ProjectPAM" />
-        <activity
-            android:name=".screen.ProfileUpdateScreen"
-            android:exported="false"
-            android:label="@string/title_activity_profileupdate_screen"
-            android:theme="@style/Theme.ProjectPAM" />
+        <receiver android:name=".viewModel.DownloadCompleteReciever" android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
+            </intent-filter>
+        </receiver>
+<!--        <activity-->
+<!--            android:name=".screen.DetailScreen"-->
+<!--            android:exported="false"-->
+<!--            android:label="@string/title_activity_detail_screen"-->
+<!--            android:theme="@style/Theme.ProjectPAM" />-->
+<!--        <activity-->
+<!--            android:name=".screen.CartsScreen"-->
+<!--            android:exported="false"-->
+<!--            android:label="@string/title_activity_cart_screen"-->
+<!--            android:theme="@style/Theme.ProjectPAM" />-->
+<!--        <activity-->
+<!--            android:name=".screen.ProfileUpdateScreen"-->
+<!--            android:exported="false"-->
+<!--            android:label="@string/title_activity_profileupdate_screen"-->
+<!--            android:theme="@style/Theme.ProjectPAM" />-->
 <!--        <activity-->
 <!--            android:name=".SignUpScreen"-->
 <!--            android:exported="false"-->
